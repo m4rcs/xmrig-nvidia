@@ -97,6 +97,15 @@ GPU configuration now possible only via config file. Sample config:
 ```
 If `threads` option not specified the miner will try automatically create optimal configuration for your GPUs.
 
+## Build
+```
+"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsMSBuildCmd.bat"
+mkdir build
+cd build
+cmake .. -G "Visual Studio 15 2017 Win64" -T v140,host=x64 -DUV_INCLUDE_DIR="c:\deps\msvc2015\libuv\x64\include" -DUV_LIBRARY="c:\deps\msvc2015\libuv\x64\lib\libuv.lib" -DMHD_INCLUDE_DIR="c:\deps\msvc2015\libmicrohttpd\x64\include" -DMHD_LIBRARY="c:\deps\msvc2015\libmicrohttpd\x64\lib\libmicrohttpd.lib"
+msbuild xmrig-nvidia.sln /p:Configuration=Release
+```
+
 ## Contacts
 * support@xmrig.com
 * [reddit](https://www.reddit.com/user/XMRig/)
