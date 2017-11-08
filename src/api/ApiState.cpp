@@ -266,7 +266,6 @@ void ApiState::getMiner(rapidjson::Document &doc) const
     doc.AddMember("cpu",          cpu, allocator);
     doc.AddMember("algo",         rapidjson::StringRef(Options::i()->algoName()), allocator);
     doc.AddMember("hugepages",    false, allocator);
-    doc.AddMember("donate_level", Options::i()->donateLevel(), allocator);
 }
 
 

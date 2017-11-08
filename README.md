@@ -50,7 +50,6 @@ GPU mining part based on [psychocrypt](https://github.com/psychocrypt) code used
       --cuda-bsleep=N       insert a delay of N microseconds between kernel launches
       --cuda-affinity=N     affine GPU threads to a CPU
       --no-color            disable colored output
-      --donate-level=N      donate level, default 5% (5 minutes in 100 minutes)
       --user-agent          set custom user-agent string for pool
   -B, --background          run the miner in the background
   -c, --config=FILE         load a JSON-format configuration file
@@ -71,7 +70,6 @@ GPU configuration now possible only via config file. Sample config:
 {
     "background": false,
     "colors": true,
-    "donate-level": 5,
     "log-file": null,
     "print-time": 60,
     "retries": 5,
@@ -98,12 +96,6 @@ GPU configuration now possible only via config file. Sample config:
 }
 ```
 If `threads` option not specified the miner will try automatically create optimal configuration for your GPUs.
-
-## Donations
-Default donation 5% (5 minutes in 100 minutes) can be reduced to 1% via command line option `--donate-level`.
-
-* XMR: `48edfHu7V9Z84YzzMa6fUueoELZ9ZRXq9VetWzYGzKt52XU5xvqgzYnDK9URnRoJMk1j8nLwEVsaSWJ4fhdUyZijBGUicoD`
-* BTC: `1P7ujsXeX7GxQwHNnJsRMgAdNkFZmNVqJT`
 
 ## Contacts
 * support@xmrig.com

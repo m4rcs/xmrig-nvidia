@@ -34,7 +34,6 @@
 
 
 #include "Cpu.h"
-#include "donate.h"
 #include "net/Url.h"
 #include "nvidia/cryptonight.h"
 #include "nvidia/NvmlApi.h"
@@ -76,7 +75,6 @@ Options:\n\
       --cuda-bsleep=N       insert a delay of N microseconds between kernel launches\n\
       --cuda-affinity=N     affine GPU threads to a CPU\n\
       --no-color            disable colored output\n\
-      --donate-level=N      donate level, default 5%% (5 minutes in 100 minutes)\n\
       --user-agent          set custom user-agent string for pool\n\
   -B, --background          run the miner in the background\n\
   -c, --config=FILE         load a JSON-format configuration file\n\
@@ -114,7 +112,6 @@ static struct option const options[] = {
     { "cuda-devices",     1, nullptr, 1203 },
     { "cuda-launch",      1, nullptr, 1204 },
     { "cuda-max-threads", 1, nullptr, 1200 },
-    { "donate-level",     1, nullptr, 1003 },
     { "help",             0, nullptr, 'h'  },
     { "keepalive",        0, nullptr ,'k'  },
     { "log-file",         1, nullptr, 'l'  },
@@ -145,7 +142,6 @@ static struct option const config_options[] = {
     { "cuda-bfactor",     1, nullptr, 1201 },
     { "cuda-bsleep",      1, nullptr, 1202 },
     { "cuda-max-threads", 1, nullptr, 1200 },
-    { "donate-level",     1, nullptr, 1003 },
     { "log-file",         1, nullptr, 'l'  },
     { "max-gpu-threads",  1, nullptr, 1200 }, // deprecated, use --cuda-max-threads instead.
     { "max-gpu-usage",    1, nullptr, 1004 }, // deprecated.
@@ -220,7 +216,6 @@ bool Options::save()
     doc.AddMember("algo",         rapidjson::StringRef(algoName()), allocator);
     doc.AddMember("background",   m_background, allocator);
     doc.AddMember("colors",       m_colors, allocator);
-    doc.AddMember("donate-level", m_donateLevel, allocator);
     doc.AddMember("log-file",     m_logFile ? rapidjson::Value(rapidjson::StringRef(algoName())).Move() : rapidjson::Value(rapidjson::kNullType).Move(), allocator);
     doc.AddMember("print-time",   m_printTime, allocator);
     doc.AddMember("retries",      m_retries, allocator);
@@ -311,7 +306,6 @@ Options::Options(int argc, char **argv) :
     m_algo(0),
     m_algoVariant(0),
     m_apiPort(0),
-    m_donateLevel(kDonateLevel),
     m_maxGpuThreads(64),
     m_maxGpuUsage(100),
     m_printTime(60),
@@ -487,7 +481,6 @@ bool Options::parseArg(int key, const char *arg)
     case 'R':  /* --retry-pause */
     case 't':  /* --threads */
     case 'v':  /* --av */
-    case 1003: /* --donate-level */
     case 1004: /* --max-gpu-usage */
     case 1007: /* --print-time */
     case 1200: /* --max-gpu-threads */
@@ -559,14 +552,6 @@ bool Options::parseArg(int key, uint64_t arg)
         }
 
         //m_threads = arg;
-        break;
-
-    case 1003: /* --donate-level */
-        if (arg < 1 || arg > 99) {
-            return true;
-        }
-
-        m_donateLevel = (int) arg;
         break;
 
     case 1004: /* --max-gpu-usage */

@@ -1,3 +1,6 @@
+# v2.4.2.1
+ - Removed donation
+
 # v2.4.2
  - Added [HTTP API](https://github.com/xmrig/xmrig/wiki/API).
  - Added CUDA 9 and Volta GPUs support.

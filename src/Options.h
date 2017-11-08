@@ -72,7 +72,6 @@ public:
     inline int algo() const                               { return m_algo; }
     inline int algoVariant() const                        { return m_algoVariant; }
     inline int apiPort() const                            { return m_apiPort; }
-    inline int donateLevel() const                        { return m_donateLevel; }
     inline int maxGpuThreads() const                      { return m_maxGpuThreads; }
     inline int printTime() const                          { return m_printTime; }
     inline int retries() const                            { return m_retries; }
@@ -118,7 +117,6 @@ private:
     int m_algo;
     int m_algoVariant;
     int m_apiPort;
-    int m_donateLevel;
     int m_maxGpuThreads;
     int m_maxGpuUsage;
     int m_printTime;
