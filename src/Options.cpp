@@ -4,7 +4,7 @@
  * Copyright 2014      Lucas Jones <https://github.com/lucasjones>
  * Copyright 2014-2016 Wolf9466    <https://github.com/OhGodAPet>
  * Copyright 2016      Jay D Dee   <jayddee246@gmail.com>
- * Copyright 2016-2017 XMRig       <support@xmrig.com>
+ * Copyright 2016-2018 XMRig       <support@xmrig.com>
  *
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -30,6 +30,11 @@
 #   include "getopt/getopt.h"
 #else
 #   include <getopt.h>
+#endif
+
+
+#ifndef XMRIG_NO_HTTPD
+#   include <microhttpd.h>
 #endif
 
 
@@ -457,11 +462,11 @@ bool Options::parseArg(int key, const char *arg)
         m_apiWorkerId = strdup(arg);
         break;
 
-    case 1201: /* --bfactor */
+    case 1201: /* --cuda-bfactor */
         m_cudaCLI.parseBFactor(arg);
         break;
 
-    case 1202: /* --bsleep */
+    case 1202: /* --cuda-bsleep */
         m_cudaCLI.parseBSleep(arg);
         break;
 
@@ -484,7 +489,6 @@ bool Options::parseArg(int key, const char *arg)
     case 1004: /* --max-gpu-usage */
     case 1007: /* --print-time */
     case 1200: /* --max-gpu-threads */
-
     case 4000: /* --api-port */
         return parseArg(key, strtol(arg, nullptr, 10));
 
@@ -574,6 +578,14 @@ bool Options::parseArg(int key, uint64_t arg)
 
     case 1200: /* --max-gpu-threads */
         m_maxGpuThreads = (int) arg;
+        break;
+
+    case 1201: /* --cuda-bfactor */
+        m_cudaCLI.addBFactor((int) arg);
+        break;
+
+    case 1202: /* --cuda-bsleep */
+        m_cudaCLI.addBSleep((int) arg);
         break;
 
     case 4000: /* --api-port */
@@ -769,6 +781,10 @@ void Options::showVersion()
     "\n");
 
     printf("\nlibuv/%s\n", uv_version_string());
+
+#   ifndef XMRIG_NO_HTTPD
+    printf("libmicrohttpd/%s\n", MHD_get_version());
+#   endif
 
     const int cudaVersion = cuda_get_runtime_version();
     printf("CUDA/%d.%d\n", cudaVersion / 1000, cudaVersion % 100);

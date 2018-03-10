@@ -1,10 +1,19 @@
 # XMRig
+[![Github All Releases](https://img.shields.io/github/downloads/xmrig/xmrig-nvidia/total.svg)](https://github.com/xmrig/xmrig-nvidia/releases)
+[![GitHub release](https://img.shields.io/github/release/xmrig/xmrig-nvidia/all.svg)](https://github.com/xmrig/xmrig-nvidia/releases)
+[![GitHub Release Date](https://img.shields.io/github/release-date-pre/xmrig/xmrig-nvidia.svg)](https://github.com/xmrig/xmrig-nvidia/releases)
+[![GitHub license](https://img.shields.io/github/license/xmrig/xmrig-nvidia.svg)](https://github.com/xmrig/xmrig-nvidia/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/xmrig/xmrig-nvidia.svg)](https://github.com/xmrig/xmrig-nvidia/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/xmrig/xmrig-nvidia.svg)](https://github.com/xmrig/xmrig-nvidia/network)
+
 XMRig is high performance Monero (XMR) NVIDIA miner, with the official full Windows support.
 
 GPU mining part based on [psychocrypt](https://github.com/psychocrypt) code used in xmr-stak-nvidia.
 
 * This is the **NVIDIA GPU** mining version, there is also a [CPU version](https://github.com/xmrig/xmrig) and [AMD GPU version]( https://github.com/xmrig/xmrig-amd).
 * [Roadmap](https://github.com/xmrig/xmrig/issues/106) for next releases.
+
+:warning: Suggested values for GPU auto configuration can be not optimal or not working, you may need tweak your threads options. Please feel free open an [issue](https://github.com/xmrig/xmrig-nvidia/issues) if auto configuration suggest wrong values.
 
 <img src="https://i.imgur.com/wRCZ3IJ.png" width="620" >
 
@@ -32,6 +41,7 @@ GPU mining part based on [psychocrypt](https://github.com/psychocrypt) code used
   * Clone with `git clone https://github.com/xmrig/xmrig-nvidia.git`  :hammer: [Build instructions](https://github.com/xmrig/xmrig-nvidia/wiki/Build).
 
 ## Usage
+Use [config.xmrig.com](https://config.xmrig.com/nvidia) to generate, edit or share configurations.
 
 ### Command line options
 ```
@@ -62,48 +72,6 @@ GPU mining part based on [psychocrypt](https://github.com/psychocrypt) code used
       --api-worker-id=ID    custom worker-id for API
   -h, --help                display this help and exit
   -V, --version             output version information and exit
-```
-
-### Config file.
-GPU configuration now possible only via config file. Sample config:
-```json
-{
-    "background": false,
-    "colors": true,
-    "log-file": null,
-    "print-time": 60,
-    "retries": 5,
-    "retry-pause": 5,
-    "syslog": false,
-    "threads": [
-        {
-            "index": 0,
-            "threads": 42,
-            "blocks": 18,
-            "bfactor": 6,
-            "bsleep": 25
-        }
-    ],
-    "pools": [
-        {
-            "url": "pool.minemonero.pro:5555",
-            "user": "",
-            "pass": "x",
-            "keepalive": true,
-            "nicehash": false
-        }
-    ]
-}
-```
-If `threads` option not specified the miner will try automatically create optimal configuration for your GPUs.
-
-## Build
-```
-"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsMSBuildCmd.bat"
-mkdir build
-cd build
-cmake .. -G "Visual Studio 15 2017 Win64" -T v140,host=x64 -DUV_INCLUDE_DIR="c:\deps\msvc2015\libuv\x64\include" -DUV_LIBRARY="c:\deps\msvc2015\libuv\x64\lib\libuv.lib" -DMHD_INCLUDE_DIR="c:\deps\msvc2015\libmicrohttpd\x64\include" -DMHD_LIBRARY="c:\deps\msvc2015\libmicrohttpd\x64\lib\libmicrohttpd.lib"
-msbuild xmrig-nvidia.sln /p:Configuration=Release
 ```
 
 ## Contacts
