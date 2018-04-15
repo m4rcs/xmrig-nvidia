@@ -4,8 +4,8 @@
  * Copyright 2014      Lucas Jones <https://github.com/lucasjones>
  * Copyright 2014-2016 Wolf9466    <https://github.com/OhGodAPet>
  * Copyright 2016      Jay D Dee   <jayddee246@gmail.com>
- * Copyright 2016-2017 XMRig       <support@xmrig.com>
- *
+ * Copyright 2017-2018 XMR-Stak    <https://github.com/fireice-uk>, <https://github.com/psychocrypt>
+ * Copyright 2016-2018 XMRig       <https://github.com/xmrig>, <support@xmrig.com>
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@
 #include "net/SubmitResult.h"
 #include "net/Url.h"
 #include "Options.h"
-#include "Platform.h"
 #include "workers/Workers.h"
 
 
@@ -53,10 +52,10 @@ Network::Network(const Options *options) :
     const std::vector<Url*> &pools = options->pools();
 
     if (pools.size() > 1) {
-        m_strategy = new FailoverStrategy(pools, Platform::userAgent(), this);
+        m_strategy = new FailoverStrategy(pools, options->retryPause(), options->retries(), this);
     }
     else {
-        m_strategy = new SinglePoolStrategy(pools.front(), Platform::userAgent(), this);
+        m_strategy = new SinglePoolStrategy(pools.front(), options->retryPause(), this);
     }
 
     m_timer.data = this;
@@ -83,7 +82,7 @@ void Network::stop()
 }
 
 
-void Network::onActive(Client *client)
+void Network::onActive(IStrategy *strategy, Client *client)
 {
     m_state.setPool(client->host(), client->port(), client->ip());
 
@@ -91,7 +90,7 @@ void Network::onActive(Client *client)
 }
 
 
-void Network::onJob(Client *client, const Job &job)
+void Network::onJob(IStrategy *strategy, Client *client, const Job &job)
 {
     setJob(client, job);
 }
@@ -113,7 +112,7 @@ void Network::onPause(IStrategy *strategy)
 }
 
 
-void Network::onResultAccepted(Client *client, const SubmitResult &result, const char *error)
+void Network::onResultAccepted(IStrategy *strategy, Client *client, const SubmitResult &result, const char *error)
 {
     m_state.add(result, error);
 

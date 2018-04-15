@@ -8,7 +8,6 @@ include (CheckIncludeFile)
 
 
 set(HEADERS
-    src/3rdparty/align.h
     src/api/Api.h
     src/api/ApiState.h
     src/api/NetworkState.h
@@ -26,8 +25,8 @@ set(HEADERS
     src/log/FileLog.h
     src/log/Log.h
     src/net/Client.h
+    src/net/Id.h
     src/net/Job.h
-    src/net/JobId.h
     src/net/JobResult.h
     src/net/Network.h
     src/net/strategies/FailoverStrategy.h
@@ -46,6 +45,7 @@ set(HEADERS
     src/workers/Handle.h
     src/workers/Hashrate.h
     src/workers/Workers.h
+    src/xmrig.h
    )
 
 set(HEADERS_CRYPTO
@@ -55,11 +55,13 @@ set(HEADERS_CRYPTO
     src/crypto/c_keccak.h
     src/crypto/c_skein.h
     src/crypto/CryptoNight.h
-    src/crypto/CryptoNight_p.h
+    src/crypto/CryptoNight_monero.h
     src/crypto/CryptoNight_test.h
+    src/crypto/CryptoNight_x86.h
     src/crypto/groestl_tables.h
     src/crypto/hash.h
     src/crypto/skein_port.h
+    src/crypto/soft_aes.h
    )
 
 set(SOURCES
@@ -97,8 +99,6 @@ set(SOURCES_CRYPTO
     src/crypto/c_blake256.c
     src/crypto/c_jh.c
     src/crypto/c_skein.c
-    src/crypto/soft_aes.c
-    src/crypto/soft_aes.c
     src/crypto/CryptoNight.cpp
    )
 
@@ -139,8 +139,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 find_package(UV REQUIRED)
 
-if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
-    set(CMAKE_BUILD_TYPE Release)
+if (NOT WITH_AEON)
+    add_definitions(/DXMRIG_NO_AEON)
 endif()
 
 include(cmake/flags.cmake)
@@ -161,10 +161,6 @@ CHECK_INCLUDE_FILE (syslog.h HAVE_SYSLOG_H)
 if (HAVE_SYSLOG_H)
     add_definitions(/DHAVE_SYSLOG_H)
     set(SOURCES_SYSLOG src/log/SysLog.h src/log/SysLog.cpp)
-endif()
-
-if (NOT WITH_AEON)
-    add_definitions(/DXMRIG_NO_AEON)
 endif()
 
 if (WITH_HTTPD)

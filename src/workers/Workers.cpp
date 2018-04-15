@@ -4,8 +4,8 @@
  * Copyright 2014      Lucas Jones <https://github.com/lucasjones>
  * Copyright 2014-2016 Wolf9466    <https://github.com/OhGodAPet>
  * Copyright 2016      Jay D Dee   <jayddee246@gmail.com>
- * Copyright 2016-2017 XMRig       <support@xmrig.com>
- *
+ * Copyright 2017-2018 XMR-Stak    <https://github.com/fireice-uk>, <https://github.com/psychocrypt>
+ * Copyright 2016-2018 XMRig       <https://github.com/xmrig>, <support@xmrig.com>
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -181,7 +181,7 @@ void Workers::start(const std::vector<GpuThread*> &threads)
     uv_timer_start(&m_timer, Workers::onTick, 500, 500);
 
     for (size_t i = 0; i < count; ++i) {
-        Handle *handle = new Handle((int) i, threads[i], (int) count, Options::i()->algo() == Options::ALGO_CRYPTONIGHT_LITE);
+        Handle *handle = new Handle((int) i, threads[i], (int) count, Options::i()->algo() == xmrig::ALGO_CRYPTONIGHT_LITE);
         m_workers.push_back(handle);
         handle->start(Workers::onReady);
     }
